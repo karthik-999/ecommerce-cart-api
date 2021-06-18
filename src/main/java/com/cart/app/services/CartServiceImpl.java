@@ -62,6 +62,7 @@ public class CartServiceImpl implements ICartService {
 		cart.setCartDate(Date.valueOf(LocalDate.now()));
 		cart.setUser(user);
 		cart.setCartTotal(0.0);
+		cart.setActive(true);
 		return cartRepository.save(cart);
 	}
 

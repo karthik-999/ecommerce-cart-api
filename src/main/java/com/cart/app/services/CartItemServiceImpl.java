@@ -29,6 +29,8 @@ public class CartItemServiceImpl implements CartItemService {
 
 	@Autowired
 	private CartItemDaoRepository cartItemDao;
+	
+	private CartRepository cartRepository;
 
 	@Autowired
 	private ICartService cartService = new CartServiceImpl();
@@ -71,12 +73,13 @@ public class CartItemServiceImpl implements CartItemService {
 		if (!(cartItemDTO != null && cartItemDTO.getCart() != null)) {
 			throw new RuntimeException("Check Request Details for CartItem");
 		}
-
 		Cart cart = cartService.getCart(cartItemDTO.getCart());
 		cartItem.setCart(cart);
-		cart.setCartTotal(Double.valueOf(cartItemDTO.getQuantity()*cartItemDTO.getPrice()));
+		cart.setCartTotal(cart.getCartTotal()+Double.valueOf(cartItemDTO.getQuantity()*cartItemDTO.getPrice()));
 		cart.setCartDate(Date.valueOf(LocalDate.now()));
+
 		BeanUtils.copyProperties(cartItemDTO, cartItem,"cart");
+		cartItem.setCart(cart);
 		return cartItemDao.save(cartItem);
 	}
 
